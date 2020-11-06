@@ -1,28 +1,36 @@
-import { get, throttle, invoke } from "lodash-es";
+import { get, invoke } from "lodash-es";
 import styled, { css } from "styled-components";
 
 const handleMouseDown = (props, type = 'vertical') => (e) => {
   e.preventDefault();
 
+  const DragHandleBar = e.target;
+
   let lastCoord = 0;
-  const handleMouseMove = throttle((e) => {
+  const handleMouseMove = (e) => {
     e.preventDefault();
+
+    // Calculate position
+    const handlePos = DragHandleBar.getBoundingClientRect();
+
     if (type === 'vertical') {
-      if (e.clientX < lastCoord) {
-        invoke(props, 'dragLeft', e);
-      } else {
+      if (e.clientX > handlePos.right && e.clientX > lastCoord) {
         invoke(props, 'dragRight', e);
+      } else if (e.clientX < handlePos.left && e.clientX < lastCoord) {
+        invoke(props, 'dragLeft', e);
       }
+      
       lastCoord = e.clientX;
     } else if (type === 'horizontal') {
-      if (e.clientY < lastCoord) {
+      if (e.clientY < handlePos.top && e.clientY < lastCoord) {
         invoke(props, 'dragUp', e);
-      } else {
+      } else if (e.clientY > handlePos.bottom && e.clientY > lastCoord) {
         invoke(props, 'dragDown', e);
       }
+
       lastCoord = e.clientY;
     }
-  }, 100);
+  };
 
   const handleMouseUp = (e) => {
     e.preventDefault();
