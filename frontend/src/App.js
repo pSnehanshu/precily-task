@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { flow } from "lodash-es";
-import WindownBox from './components/WindowBox';
+import WindowBox from './components/WindowBox';
 
-const getPercent = (amount, percent = 100) => (percent/100) * amount;
-
+const getPercent = (amount, percent = 100) => (percent / 100) * amount;
+const resizeSpeed = 20;
 const winW = getPercent(window.innerWidth, 95);
 const winH = getPercent(window.innerHeight, 95);
 
-function App() {  
+function App() {
   const [sizes, setSizes] = useState({
     win1: {
       height: getPercent(winH, 50),
@@ -28,7 +28,7 @@ function App() {
       ...s,
       [winid]: {
         ...s[winid],
-        width: s[winid].width + 10,
+        width: s[winid].width + resizeSpeed,
       }
     }));
   };
@@ -37,7 +37,7 @@ function App() {
       ...s,
       [winid]: {
         ...s[winid],
-        width: s[winid].width - 10,
+        width: s[winid].width - resizeSpeed,
       }
     }));
   };
@@ -46,7 +46,7 @@ function App() {
       ...s,
       [winid]: {
         ...s[winid],
-        height: s[winid].height + 10,
+        height: s[winid].height + resizeSpeed,
       }
     }));
   };
@@ -55,7 +55,7 @@ function App() {
       ...s,
       [winid]: {
         ...s[winid],
-        height: s[winid].height - 10,
+        height: s[winid].height - resizeSpeed,
       }
     }));
   };
@@ -68,7 +68,7 @@ function App() {
   return (
     <div className="App">
       <div>
-        <WindownBox
+        <WindowBox
           width={`${sizes.win1.width}px`}
           height={`${sizes.win1.height}px`}
           onIncreaseWidth={win1WidthIncreaseSync}
@@ -76,7 +76,7 @@ function App() {
           onIncreaseHeight={row1HeightIncreaseSync}
           onDecreaseHeight={row1HeightDecreaseSync}
         />
-        <WindownBox
+        <WindowBox
           width={`${sizes.win2.width}px`}
           height={`${sizes.win2.height}px`}
           onIncreaseWidth={win1WidthDecreaseSync}
@@ -86,7 +86,7 @@ function App() {
         />
       </div>
       <div>
-        <WindownBox
+        <WindowBox
           width={`${sizes.win3.width}px`}
           height={`${sizes.win3.height}px`}
           onIncreaseWidth={increaseWidth('win3')}

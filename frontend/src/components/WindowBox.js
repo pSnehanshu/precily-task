@@ -10,7 +10,7 @@ const Win = styled.div`
   height: ${props => get(props, 'height', '350px')};
 `;
 
-export default function WindownBox({ 
+export default function WindowBox({ 
   height, 
   width, 
   onIncreaseWidth, 
