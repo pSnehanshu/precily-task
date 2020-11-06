@@ -7,6 +7,11 @@ const dbPromise = require('./db');
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/content', (req, res) => dbPromise
+  .then((db) => db.all('SELECT * FROM content'))
+  .then((data) => res.json(data))
+  .catch((err) => res.status(500).send(err.message)));
+
 app.post('/add', async (req, res) => {
   const windowId = _.get(req, 'body.windowId');
   const content = _.get(req, 'body.content');
