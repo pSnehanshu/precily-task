@@ -1,52 +1,11 @@
 import { useState } from "react";
-import { get, flow } from "lodash-es";
-import styled from "styled-components";
-import { DragHandleHorizontal, DragHandleVertical } from "./components/Handles";
+import { flow } from "lodash-es";
+import WindownBox from './components/WindowBox';
 
-const Win = styled.div`
-  display: inline-block;
-  margin: 5px;
-  position: relative;
-  width: ${props => get(props, 'width', '100%')};
-  height: ${props => get(props, 'height', '350px')};
-`;
+const getPercent = (amount, percent = 100) => (percent/100) * amount;
 
-function WindownBox({ 
-  height, 
-  width, 
-  onIncreaseWidth, 
-  onDecreaseWidth ,
-  onIncreaseHeight,
-  onDecreaseHeight,
-}) {
-  return <Win height={height} width={width}>
-    <DragHandleHorizontal
-      type="top"
-      dragUp={onIncreaseHeight}
-      dragDown={onDecreaseHeight}
-    />
-    <DragHandleHorizontal
-      type="bottom"
-      dragUp={onDecreaseHeight}
-      dragDown={onIncreaseHeight}
-    />
-    <DragHandleVertical
-      type="right"
-      dragRight={onIncreaseWidth}
-      dragLeft={onDecreaseWidth}
-    />
-    <DragHandleVertical
-      type="left"
-      dragRight={onDecreaseWidth}
-      dragLeft={onIncreaseWidth}
-    />
-  </Win>;
-}
-
-const getPercent = (amount = 1, percent = 100) => (percent/100) * amount;
-
-const winW = getPercent(window.innerWidth, 90);
-const winH = getPercent(window.innerHeight, 90);
+const winW = getPercent(window.innerWidth, 95);
+const winH = getPercent(window.innerHeight, 95);
 
 function App() {  
   const [sizes, setSizes] = useState({
