@@ -1,5 +1,38 @@
-import { get, throttle, isNull, invoke } from "lodash-es";
+import { get, throttle, invoke } from "lodash-es";
 import styled, { css } from "styled-components";
+
+const handleMouseDown = (props, type = 'vertical') => (e) => {
+  e.preventDefault();
+
+  let lastCoord = 0;
+  const handleMouseMove = throttle((e) => {
+    e.preventDefault();
+    if (type === 'vertical') {
+      if (e.clientX < lastCoord) {
+        invoke(props, 'dragLeft', e);
+      } else {
+        invoke(props, 'dragRight', e);
+      }
+      lastCoord = e.clientX;
+    } else if (type === 'horizontal') {
+      if (e.clientY < lastCoord) {
+        invoke(props, 'dragUp', e);
+      } else {
+        invoke(props, 'dragDown', e);
+      }
+      lastCoord = e.clientY;
+    }
+  }, 100);
+
+  const handleMouseUp = (e) => {
+    e.preventDefault();
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+};
 
 const getHandleTypeCss = (type) => {
   const cursors = {
@@ -38,40 +71,17 @@ const Horizontal = styled.div`
 `;
 
 function DragHandleVertical(props) {
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    
-    let lastX = null;
-    const handleMouseMove = throttle((e) => {
-      e.preventDefault();
-      if (!isNull(lastX)) {
-        if (e.clientX < lastX) {
-          invoke(props, 'dragLeft', e);
-        } else {
-          invoke(props, 'dragRight', e);
-        }
-      }
-      lastX = e.clientX;
-    }, 100);
-
-    const handleMouseUp = (e) => {
-      e.preventDefault();
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-  };
-
   return <Vertical
     {...props}
-    onMouseDown={handleMouseDown}
+    onMouseDown={handleMouseDown(props, 'vertical')}
   />
 }
 
 function DragHandleHorizontal(props) {
-  return <Horizontal {...props} />
+  return <Horizontal
+    {...props}
+    onMouseDown={handleMouseDown(props, 'horizontal')}
+  />
 }
 
 export {

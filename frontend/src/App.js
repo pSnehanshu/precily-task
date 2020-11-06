@@ -14,10 +14,25 @@ const Win = styled.div`
   height: ${props => get(props, 'height', '350px')};
 `;
 
-function WindownBox({ height, width, onIncreaseWidth, onDecreaseWidth }) {
+function WindownBox({ 
+  height, 
+  width, 
+  onIncreaseWidth, 
+  onDecreaseWidth ,
+  onIncreaseHeight,
+  onDecreaseHeight,
+}) {
   return <Win height={height} width={width}>
-    <DragHandleHorizontal type="top" />
-    <DragHandleHorizontal type="bottom" />
+    <DragHandleHorizontal
+      type="top"
+      dragUp={onIncreaseHeight}
+      dragDown={onDecreaseHeight}
+    />
+    <DragHandleHorizontal
+      type="bottom"
+      dragUp={onDecreaseHeight}
+      dragDown={onIncreaseHeight}
+    />
     <DragHandleVertical
       type="right"
       dragRight={onIncreaseWidth}
@@ -65,6 +80,24 @@ function App() {
       }
     }));
   };
+  const onIncreaseHeight = (winid) => (e) => {
+    setSizes((s) => ({
+      ...s,
+      [winid]: {
+        ...s[winid],
+        height: s[winid].height + 10,
+      }
+    }));
+  };
+  const onDecreaseHeight = (winid) => (e) => {
+    setSizes((s) => ({
+      ...s,
+      [winid]: {
+        ...s[winid],
+        height: s[winid].height - 10,
+      }
+    }));
+  };
 
   return (
     <div className="App">
@@ -74,12 +107,16 @@ function App() {
           height={`${sizes.win1.height}px`}
           onIncreaseWidth={onIncreaseWidth('win1')}
           onDecreaseWidth={onDecreaseWidth('win1')}
+          onIncreaseHeight={onIncreaseHeight('win1')}
+          onDecreaseHeight={onDecreaseHeight('win1')}
         />
         <WindownBox
           width={`${sizes.win2.width}px`}
           height={`${sizes.win2.height}px`}
           onIncreaseWidth={onIncreaseWidth('win2')}
           onDecreaseWidth={onDecreaseWidth('win2')}
+          onIncreaseHeight={onIncreaseHeight('win2')}
+          onDecreaseHeight={onDecreaseHeight('win2')}
         />
       </Container>
       <Container>
@@ -88,6 +125,8 @@ function App() {
           height={`${sizes.win3.height}px`}
           onIncreaseWidth={onIncreaseWidth('win3')}
           onDecreaseWidth={onDecreaseWidth('win3')}
+          onIncreaseHeight={onIncreaseHeight('win3')}
+          onDecreaseHeight={onDecreaseHeight('win3')}
         />
       </Container>
     </div>
