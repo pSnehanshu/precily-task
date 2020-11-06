@@ -69,6 +69,7 @@ function App() {
     <div className="App">
       <div>
         <WindowBox
+          windowId="win1"
           width={`${sizes.win1.width}px`}
           height={`${sizes.win1.height}px`}
           onIncreaseWidth={win1WidthIncreaseSync}
@@ -77,6 +78,7 @@ function App() {
           onDecreaseHeight={row1HeightDecreaseSync}
         />
         <WindowBox
+          windowId="win2"
           width={`${sizes.win2.width}px`}
           height={`${sizes.win2.height}px`}
           onIncreaseWidth={win1WidthDecreaseSync}
@@ -87,6 +89,7 @@ function App() {
       </div>
       <div>
         <WindowBox
+          windowId="win3"
           width={`${sizes.win3.width}px`}
           height={`${sizes.win3.height}px`}
           onIncreaseWidth={increaseWidth('win3')}
