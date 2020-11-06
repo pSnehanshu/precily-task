@@ -6,6 +6,7 @@ const Win = styled.div`
   display: inline-block;
   margin: 5px;
   position: relative;
+  border: solid 4px gray;
   width: ${props => get(props, 'width', '100%')};
   height: ${props => get(props, 'height', '350px')};
 `;

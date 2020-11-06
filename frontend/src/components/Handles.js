@@ -60,7 +60,6 @@ const Vertical = styled.div`
   position: absolute;
   height: 100%;
   width: 5px;
-  background: gray;
   ${(props) => {
     const type = get(props, 'type', 'top');
     return getHandleTypeCss(type);
@@ -71,7 +70,6 @@ const Horizontal = styled.div`
   position: absolute;
   width: 100%;
   height: 5px;
-  background: gray;
   ${(props) => {
     const type = get(props, 'type', 'left');
     return getHandleTypeCss(type);
