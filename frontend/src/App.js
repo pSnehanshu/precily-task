@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { get } from "lodash-es";
+import { get, flow } from "lodash-es";
 import styled from "styled-components";
 import { DragHandleHorizontal, DragHandleVertical } from "./components/Handles";
 
-const Container = styled.div`
-  display: flex;
-`;
-
 const Win = styled.div`
+  display: inline-block;
   margin: 5px;
   position: relative;
   width: ${props => get(props, 'width', '100%')};
@@ -46,23 +43,28 @@ function WindownBox({
   </Win>;
 }
 
-function App() {
+const getPercent = (amount = 1, percent = 100) => (percent/100) * amount;
+
+const winW = getPercent(window.innerWidth, 90);
+const winH = getPercent(window.innerHeight, 90);
+
+function App() {  
   const [sizes, setSizes] = useState({
     win1: {
-      height: 350,
-      width: 200,
+      height: getPercent(winH, 50),
+      width: getPercent(winW, 30),
     },
     win2: {
-      height: 350,
-      width: 800,
+      height: getPercent(winH, 50),
+      width: getPercent(winW, 70),
     },
     win3: {
-      height: 350,
-      width: 1000,
+      height: getPercent(winH, 50),
+      width: getPercent(winW, 101),
     },
   });
 
-  const onIncreaseWidth = (winid) => (e) => {
+  const increaseWidth = (winid) => (e) => {
     setSizes((s) => ({
       ...s,
       [winid]: {
@@ -71,7 +73,7 @@ function App() {
       }
     }));
   };
-  const onDecreaseWidth = (winid) => (e) => {
+  const decreaseWidth = (winid) => (e) => {
     setSizes((s) => ({
       ...s,
       [winid]: {
@@ -80,7 +82,7 @@ function App() {
       }
     }));
   };
-  const onIncreaseHeight = (winid) => (e) => {
+  const increaseHeight = (winid) => (e) => {
     setSizes((s) => ({
       ...s,
       [winid]: {
@@ -89,7 +91,7 @@ function App() {
       }
     }));
   };
-  const onDecreaseHeight = (winid) => (e) => {
+  const decreaseHeight = (winid) => (e) => {
     setSizes((s) => ({
       ...s,
       [winid]: {
@@ -99,36 +101,41 @@ function App() {
     }));
   };
 
+  const row1HeightIncreaseSync = flow([increaseHeight('win1'), increaseHeight('win2'), decreaseHeight('win3')]);
+  const row1HeightDecreaseSync = flow([decreaseHeight('win1'), decreaseHeight('win2'), increaseHeight('win3')]);
+  const win1WidthIncreaseSync = flow([increaseWidth('win1'), decreaseWidth('win2')]);
+  const win1WidthDecreaseSync = flow([decreaseWidth('win1'), increaseWidth('win2')]);
+
   return (
     <div className="App">
-      <Container>
+      <div>
         <WindownBox
           width={`${sizes.win1.width}px`}
           height={`${sizes.win1.height}px`}
-          onIncreaseWidth={onIncreaseWidth('win1')}
-          onDecreaseWidth={onDecreaseWidth('win1')}
-          onIncreaseHeight={onIncreaseHeight('win1')}
-          onDecreaseHeight={onDecreaseHeight('win1')}
+          onIncreaseWidth={win1WidthIncreaseSync}
+          onDecreaseWidth={win1WidthDecreaseSync}
+          onIncreaseHeight={row1HeightIncreaseSync}
+          onDecreaseHeight={row1HeightDecreaseSync}
         />
         <WindownBox
           width={`${sizes.win2.width}px`}
           height={`${sizes.win2.height}px`}
-          onIncreaseWidth={onIncreaseWidth('win2')}
-          onDecreaseWidth={onDecreaseWidth('win2')}
-          onIncreaseHeight={onIncreaseHeight('win2')}
-          onDecreaseHeight={onDecreaseHeight('win2')}
+          onIncreaseWidth={win1WidthDecreaseSync}
+          onDecreaseWidth={win1WidthIncreaseSync}
+          onIncreaseHeight={row1HeightIncreaseSync}
+          onDecreaseHeight={row1HeightDecreaseSync}
         />
-      </Container>
-      <Container>
+      </div>
+      <div>
         <WindownBox
           width={`${sizes.win3.width}px`}
           height={`${sizes.win3.height}px`}
-          onIncreaseWidth={onIncreaseWidth('win3')}
-          onDecreaseWidth={onDecreaseWidth('win3')}
-          onIncreaseHeight={onIncreaseHeight('win3')}
-          onDecreaseHeight={onDecreaseHeight('win3')}
+          onIncreaseWidth={increaseWidth('win3')}
+          onDecreaseWidth={decreaseWidth('win3')}
+          onIncreaseHeight={row1HeightDecreaseSync}
+          onDecreaseHeight={row1HeightIncreaseSync}
         />
-      </Container>
+      </div>
     </div>
   );
 }
