@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { flow } from "lodash-es";
 import WindowBox from './components/WindowBox';
+import store from './store';
 
 const getPercent = (amount, percent = 100) => (percent / 100) * amount;
 const resizeSpeed = 20;
@@ -65,8 +66,15 @@ function App() {
   const win1WidthIncreaseSync = flow([increaseWidth('win1'), decreaseWidth('win2')]);
   const win1WidthDecreaseSync = flow([decreaseWidth('win1'), increaseWidth('win2')]);
 
+  const counter = store.useState(s => s.counter);
+
   return (
     <div className="App">
+      <div style={{ padding: '5px' }}>
+        <div>Added: {counter.add}</div>
+        <div>Updated: {counter.update}</div>
+      </div>
+
       <div>
         <WindowBox
           windowId="win1"

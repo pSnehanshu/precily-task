@@ -28,7 +28,7 @@ export default function WindowBox({
   return <Win height={height} width={width}>
     <div>
       {loading ? <b>Loading...</b> : (
-        content ? <p>{content}</p> : <b>No content</b>
+        content ? <span>{content}</span> : <b>No content</b>
       )}
     </div>
 
